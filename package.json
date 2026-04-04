@@ -1,0 +1,29 @@
+{
+  "name": "research-agent-system",
+  "version": "1.0.0",
+  "description": "Autonomous AI Research Agent — closed-loop reasoning machine",
+  "main": "dist/agent.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/agent.js",
+    "dev": "ts-node src/agent.ts",
+    "example": "ts-node src/example.ts",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "@langchain/anthropic": "^0.3.0",
+    "@langchain/core": "^0.3.0",
+    "@langchain/langgraph": "^0.2.0",
+    "@langchain/openai": "^0.3.0",
+    "axios": "^1.7.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
