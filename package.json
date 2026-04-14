@@ -7,6 +7,7 @@
     "build": "tsc",
     "start": "node dist/agent.js",
     "dev": "ts-node src/agent.ts",
+    "demo": "ts-node src/demo.ts",
     "example": "ts-node src/example.ts",
     "lint": "eslint src --ext .ts"
   },
