@@ -98,16 +98,58 @@ cp .env.example .env
 ## Run
 
 ```bash
-# Pretty logs, example query
+# Zero API keys — full loop on fixture data (demo mode)
+npm run demo
+
+# Pretty logs, annotated example query (requires LLM key)
 LOG_FORMAT=pretty npx ts-node src/example.ts
 
-# CLI — single query
+# CLI — single query (requires LLM key)
 LOG_FORMAT=pretty npx ts-node src/agent.ts "What is the Mamba architecture?"
 
 # Build and run compiled output
 npm run build
 node dist/agent.js "Your research query here"
 ```
+
+### Demo mode
+
+`npm run demo` runs the complete Planner → Research → Analyzer → Critic loop **without any API keys** using pre-baked fixture data. It shows two full iterations — the critic rejects the first pass (score 0.61 < threshold) and approves the second (score 0.83) — with realistic timing and annotated output.
+
+```
+════════════════════════════════════════════════════════════════
+  RESEARCH AGENT DEMO  (no API keys required)
+════════════════════════════════════════════════════════════════
+  Query: "What are the key differences between transformer..."
+  Max iterations : 3   |   Quality threshold : 0.75
+────────────────────────────────────────────────────────────────
+
+  [planner]  decomposing query... done
+  [research] iteration 1 — calling tools.... done
+  [analyzer] iteration 1 — synthesising evidence... done
+  [critic]   iteration 1 — scoring output... ✗  score=0.61
+  [research] iteration 2 — calling tools.... done
+  [analyzer] iteration 2 — synthesising evidence... done
+  [critic]   iteration 2 — scoring output... ✓  score=0.83
+
+════════════════════════════════════════════════════════════════
+  FINAL ANSWER
+════════════════════════════════════════════════════════════════
+Mamba is a state space model (SSM) architecture...
+
+  QUALITY METRICS
+  Score      [█████████████████████████░░░░░]  0.830
+  Iterations 2 / 3
+  Exit       threshold_met
+
+  Dimension breakdown (final iteration):
+    completeness         [██████████████████░░]  0.90
+    structure            [████████████████░░░░]  0.80
+    factual_confidence   [███████████████░░░░░]  0.78
+════════════════════════════════════════════════════════════════
+```
+
+The fixtures live in [src/fixtures/index.ts](src/fixtures/index.ts) — typed against real contracts, so any contract change that breaks a fixture will surface immediately at compile time.
 
 ## Programmatic API
 
@@ -157,3 +199,19 @@ All node transitions are typed and validated. Key interfaces:
 - `CriticResultContract` — dimension scores + exit reason + focus areas for retry
 
 See [src/contracts/index.ts](src/contracts/index.ts) for full definitions.
+
+## Test fixtures
+
+Pre-baked data in [src/fixtures/index.ts](src/fixtures/index.ts) covers every contract across two iterations:
+
+| Export | Contract | Iteration | State |
+|---|---|---|---|
+| `FIXTURE_PLANNER_OUTPUT` | `PlannerOutputContract` | — | 3 sub-questions, 6 search queries |
+| `FIXTURE_RESEARCH_RESULT_ITER1` | `ResearchResultContract` | 1 | 2 sources, 4 tool calls |
+| `FIXTURE_RESEARCH_RESULT_ITER2` | `ResearchResultContract` | 2 | 4 sources, 8 tool calls |
+| `FIXTURE_ANALYSIS_RESULT_ITER1` | `AnalysisResultContract` | 1 | 2/3 sub-questions answered |
+| `FIXTURE_ANALYSIS_RESULT_ITER2` | `AnalysisResultContract` | 2 | all sub-questions answered |
+| `FIXTURE_CRITIC_RESULT_ITER1` | `CriticResultContract` | 1 | score=0.61, loop continues |
+| `FIXTURE_CRITIC_RESULT_ITER2` | `CriticResultContract` | 2 | score=0.83, threshold_met |
+
+All fixtures are typed against real contracts — a contract change that breaks a fixture surfaces at compile time, not at runtime.
