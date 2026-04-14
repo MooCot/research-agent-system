@@ -2,6 +2,42 @@
 
 Autonomous AI research agent built on LangGraph. Implements a closed-loop reasoning machine: **Planner → Research → Analyzer → Critic → repeat until stable**.
 
+## Quick Start
+
+```bash
+# 1. Clone and install
+git clone https://github.com/MooCot/research-agent-system.git
+cd research-agent-system
+npm install
+
+# 2. Configure — copy the template and add at least one LLM key
+cp .env.example .env
+# open .env and set OPENAI_API_KEY or ANTHROPIC_API_KEY
+
+# 3. Run — ask any research question
+LOG_FORMAT=pretty npx ts-node src/agent.ts "What is the Mamba architecture?"
+```
+
+That's it. No database, no Docker, no build step required for dev.
+
+> **No search API key?** Leave `BRAVE_SEARCH_API_KEY` empty — the agent runs on deterministic mock results, which is enough to verify the full loop locally.
+
+**Output example:**
+```
+═══════════════════════════════════════════════════════
+FINAL ANSWER
+═══════════════════════════════════════════════════════
+Mamba is a state space model (SSM) architecture...
+
+─── Metadata ───────────────────────────────────────────
+Quality score : 0.812
+Iterations    : 2
+Exit reason   : threshold_met
+Degraded mode : false
+Sources used  : 7
+═══════════════════════════════════════════════════════
+```
+
 ## Architecture
 
 ```
