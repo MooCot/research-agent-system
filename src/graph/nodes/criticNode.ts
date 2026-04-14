@@ -28,9 +28,9 @@ import type {
   CriticDimension,
   ExitReason,
   FinalAnswer,
-} from "../../contracts/index.js";
-import { logger } from "../../observability/logger.js";
-import { getMemory } from "./researchNode.js";
+} from "../../contracts/index";
+import { logger } from "../../observability/logger";
+import { getMemory } from "./researchNode";
 
 // ─── Zod schema ───────────────────────────────────────────────────────────────
 
@@ -58,6 +58,16 @@ function buildLLM() {
     return new ChatAnthropic({
       model: process.env.ANTHROPIC_MODEL ?? "claude-sonnet-4-6",
       temperature: 0,
+    });
+  }
+  if (process.env.DASHSCOPE_API_KEY) {
+    return new ChatOpenAI({
+      apiKey: process.env.DASHSCOPE_API_KEY,
+      model: process.env.DASHSCOPE_MODEL ?? "qwen-plus",
+      temperature: 0,
+      configuration: {
+        baseURL: "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+      },
     });
   }
   return new ChatOpenAI({
@@ -232,17 +242,14 @@ ${isLastIteration ? "NOTE: This is the final allowed iteration. Score what we ha
     shouldContinue,
     ...(finalAnswer !== undefined ? { finalAnswer } : {}),
     iterationNumber: state.iterationNumber + (shouldContinue ? 1 : 0),
-    nodeExecutionLog: [
-      ...state.nodeExecutionLog,
-      {
+    nodeExecutionLog: [{
         node: "critic",
         iteration: state.iterationNumber,
         durationMs,
         criticScore: criticResult.overallScore,
         ...(exitReason !== undefined ? { exitReason } : {}),
         timestamp: Date.now(),
-      },
-    ],
+      }],
   };
 }
 

@@ -21,8 +21,8 @@ import type {
   AnalysisResultContract,
   EvidencePiece,
   KeyFact,
-} from "../../contracts/index.js";
-import { logger } from "../../observability/logger.js";
+} from "../../contracts/index";
+import { logger } from "../../observability/logger";
 
 // ─── Zod schema ───────────────────────────────────────────────────────────────
 
@@ -45,6 +45,16 @@ function buildLLM() {
     return new ChatAnthropic({
       model: process.env.ANTHROPIC_MODEL ?? "claude-sonnet-4-6",
       temperature: 0.1,
+    });
+  }
+  if (process.env.DASHSCOPE_API_KEY) {
+    return new ChatOpenAI({
+      apiKey: process.env.DASHSCOPE_API_KEY,
+      model: process.env.DASHSCOPE_MODEL ?? "qwen-plus",
+      temperature: 0.1,
+      configuration: {
+        baseURL: "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+      },
     });
   }
   return new ChatOpenAI({
@@ -154,15 +164,12 @@ ${evidenceDigest}
 
   return {
     analysisResult,
-    nodeExecutionLog: [
-      ...state.nodeExecutionLog,
-      {
+    nodeExecutionLog: [{
         node: "analyzer",
         iteration: state.iterationNumber,
         durationMs,
         timestamp: Date.now(),
-      },
-    ],
+      }],
   };
 }
 

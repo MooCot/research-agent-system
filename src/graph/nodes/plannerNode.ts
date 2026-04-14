@@ -16,8 +16,8 @@ import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import crypto from "crypto";
 
-import type { AgentState, PlannerOutputContract } from "../../contracts/index.js";
-import { logger } from "../../observability/logger.js";
+import type { AgentState, PlannerOutputContract } from "../../contracts/index";
+import { logger } from "../../observability/logger";
 
 // ─── Zod schema for LLM response validation ───────────────────────────────────
 
@@ -32,13 +32,23 @@ const PlanSchema = z.object({
   subQuestions: z.array(SubQuestionSchema).min(1).max(6),
 });
 
-// ─── LLM factory (OpenAI default, Anthropic if ANTHROPIC_API_KEY set) ─────────
+// ─── LLM factory (Anthropic > DashScope/Alibaba > OpenAI) ────────────────────
 
 function buildLLM() {
   if (process.env.ANTHROPIC_API_KEY) {
     return new ChatAnthropic({
       model: process.env.ANTHROPIC_MODEL ?? "claude-sonnet-4-6",
       temperature: 0,
+    });
+  }
+  if (process.env.DASHSCOPE_API_KEY) {
+    return new ChatOpenAI({
+      apiKey: process.env.DASHSCOPE_API_KEY,
+      model: process.env.DASHSCOPE_MODEL ?? "qwen-plus",
+      temperature: 0,
+      configuration: {
+        baseURL: "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+      },
     });
   }
   return new ChatOpenAI({
@@ -125,15 +135,12 @@ export async function plannerNode(state: AgentState): Promise<Partial<AgentState
 
   return {
     plannerOutput,
-    nodeExecutionLog: [
-      ...state.nodeExecutionLog,
-      {
+    nodeExecutionLog: [{
         node: "planner",
         iteration: state.iterationNumber,
         durationMs,
         timestamp: Date.now(),
-      },
-    ],
+      }],
   };
 }
 

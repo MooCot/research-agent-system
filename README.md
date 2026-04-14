@@ -84,7 +84,7 @@ If `iterationNumber >= maxIterations` → **max_iterations_reached** + degraded 
 ## Requirements
 
 - Node.js >= 20
-- One of: `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`
+- One of: `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or `DASHSCOPE_API_KEY`
 - Optional: `BRAVE_SEARCH_API_KEY` (falls back to mock results without it)
 
 ## Setup
@@ -92,7 +92,7 @@ If `iterationNumber >= maxIterations` → **max_iterations_reached** + degraded 
 ```bash
 npm install
 cp .env.example .env
-# fill in at minimum OPENAI_API_KEY or ANTHROPIC_API_KEY
+# fill in at minimum one of: OPENAI_API_KEY / ANTHROPIC_API_KEY / DASHSCOPE_API_KEY
 ```
 
 ## Run
@@ -176,10 +176,12 @@ console.log(result.memorySnapshot);            // searches, URLs, answered sub-q
 
 | Variable | Default | Description |
 |---|---|---|
-| `OPENAI_API_KEY` | — | OpenAI key (used if no Anthropic key) |
-| `ANTHROPIC_API_KEY` | — | Anthropic key (takes priority over OpenAI) |
+| `OPENAI_API_KEY` | — | OpenAI key (lowest priority) |
+| `ANTHROPIC_API_KEY` | — | Anthropic key (highest priority) |
+| `DASHSCOPE_API_KEY` | — | Alibaba Cloud / Qwen key (priority between Anthropic and OpenAI) |
 | `OPENAI_MODEL` | `gpt-4o` | OpenAI model override |
 | `ANTHROPIC_MODEL` | `claude-sonnet-4-6` | Anthropic model override |
+| `DASHSCOPE_MODEL` | `qwen-plus` | DashScope model override (`qwen-turbo` / `qwen-plus` / `qwen-max` / `qwen-long`) |
 | `BRAVE_SEARCH_API_KEY` | — | Brave Search key (mock results if absent) |
 | `SEARCH_TIMEOUT_MS` | `8000` | Web search request timeout |
 | `SEARCH_MAX_RESULTS` | `5` | Results per search query |
