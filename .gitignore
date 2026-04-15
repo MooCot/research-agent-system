@@ -25,3 +25,6 @@ Thumbs.db
 
 # TypeScript cache
 *.tsbuildinfo
+
+# Project-local AI instructions (not for public repo)
+CLAUDE.md
