@@ -12,8 +12,8 @@
  */
 
 import axios, { type AxiosError } from "axios";
-import type { ToolResult, FetchToolOutput } from "./types.js";
-import { logger } from "../observability/logger.js";
+import type { ToolResult, FetchToolOutput } from "./types";
+import { logger } from "../observability/logger";
 
 const DEFAULT_TIMEOUT_MS = parseInt(process.env.FETCH_TIMEOUT_MS ?? "10000", 10);
 const DEFAULT_MAX_CONTENT = parseInt(process.env.FETCH_MAX_CONTENT_LEN ?? "6000", 10);

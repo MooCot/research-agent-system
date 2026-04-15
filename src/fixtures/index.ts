@@ -13,7 +13,7 @@ import type {
   CriticResultContract,
   EvidencePiece,
   SubQuestion,
-} from "../../src/contracts/index.js";
+} from "../../src/contracts/index";
 
 // ─── Sub-questions ────────────────────────────────────────────────────────────
 

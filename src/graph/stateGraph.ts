@@ -36,13 +36,13 @@ import type {
   CriticResultContract,
   FinalAnswer,
   NodeExecutionEntry,
-} from "../contracts/index.js";
+} from "../contracts/index";
 
-import { plannerNode } from "./nodes/plannerNode.js";
-import { researchNode } from "./nodes/researchNode.js";
-import { analyzerNode } from "./nodes/analyzerNode.js";
-import { criticNode } from "./nodes/criticNode.js";
-import { logger } from "../observability/logger.js";
+import { plannerNode } from "./nodes/plannerNode";
+import { researchNode } from "./nodes/researchNode";
+import { analyzerNode } from "./nodes/analyzerNode";
+import { criticNode } from "./nodes/criticNode";
+import { logger } from "../observability/logger";
 
 // ─── State annotation (LangGraph channel definitions) ────────────────────────
 //

@@ -17,11 +17,11 @@ import type {
   AgentState,
   ResearchResultContract,
   EvidencePiece,
-} from "../../contracts/index.js";
-import { ResearchMemory } from "../../memory/ResearchMemory.js";
-import { WebSearchTool } from "../../tools/WebSearchTool.js";
-import { FetchURLTool } from "../../tools/FetchURLTool.js";
-import { logger } from "../../observability/logger.js";
+} from "../../contracts/index";
+import { ResearchMemory } from "../../memory/ResearchMemory";
+import { WebSearchTool } from "../../tools/WebSearchTool";
+import { FetchURLTool } from "../../tools/FetchURLTool";
+import { logger } from "../../observability/logger";
 
 // Shared across the agent run — injected via module-level singleton
 // (LangGraph nodes are functions; state for cross-node services is passed in)
@@ -176,14 +176,11 @@ export async function researchNode(
   return {
     researchResult,
     toolCallCount,
-    nodeExecutionLog: [
-      ...state.nodeExecutionLog,
-      {
+    nodeExecutionLog: [{
         node: "research",
         iteration: state.iterationNumber,
         durationMs,
         timestamp: Date.now(),
-      },
-    ],
+      }],
   };
 }

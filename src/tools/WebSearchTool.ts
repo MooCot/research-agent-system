@@ -13,8 +13,8 @@
  */
 
 import axios, { type AxiosError } from "axios";
-import type { ToolResult, SearchResult, SearchToolOutput } from "./types.js";
-import { logger } from "../observability/logger.js";
+import type { ToolResult, SearchResult, SearchToolOutput } from "./types";
+import { logger } from "../observability/logger";
 
 const BRAVE_API_BASE = "https://api.search.brave.com/res/v1/web/search";
 const DEFAULT_TIMEOUT_MS = parseInt(process.env.SEARCH_TIMEOUT_MS ?? "8000", 10);

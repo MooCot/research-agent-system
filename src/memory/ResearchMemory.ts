@@ -14,7 +14,7 @@
  */
 
 import crypto from "crypto";
-import type { EvidencePiece } from "../contracts/index.js";
+import type { EvidencePiece } from "../contracts/index";
 
 export interface MemorySnapshot {
   queriedSearches: string[];

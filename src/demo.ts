@@ -26,11 +26,11 @@ import type {
   FinalAnswer,
   NodeExecutionEntry,
   AgentState,
-} from "./contracts/index.js";
+} from "./contracts/index";
 
-import { ResearchMemory } from "./memory/ResearchMemory.js";
-import { injectMemory } from "./graph/nodes/researchNode.js";
-import { logger } from "./observability/logger.js";
+import { ResearchMemory } from "./memory/ResearchMemory";
+import { injectMemory } from "./graph/nodes/researchNode";
+import { logger } from "./observability/logger";
 
 import {
   FIXTURE_PLANNER_OUTPUT,
@@ -40,7 +40,7 @@ import {
   FIXTURE_ANALYSIS_RESULT_ITER2,
   FIXTURE_CRITIC_RESULT_ITER1,
   FIXTURE_CRITIC_RESULT_ITER2,
-} from "./fixtures/index.js";
+} from "./fixtures/index";
 
 // ─── Demo query ───────────────────────────────────────────────────────────────
 
@@ -70,10 +70,7 @@ async function mockPlannerNode(
 
   return {
     plannerOutput,
-    nodeExecutionLog: [
-      ...state.nodeExecutionLog,
-      { node: "planner", iteration: state.iterationNumber, durationMs: Date.now() - startMs, timestamp: Date.now() },
-    ],
+    nodeExecutionLog: [{ node: "planner", iteration: state.iterationNumber, durationMs: Date.now() - startMs, timestamp: Date.now() }],
   };
 }
 
@@ -108,10 +105,7 @@ async function mockResearchNode(
   return {
     researchResult,
     toolCallCount: state.toolCallCount + fixture.toolCallCount,
-    nodeExecutionLog: [
-      ...state.nodeExecutionLog,
-      { node: "research", iteration: iter, durationMs: Date.now() - startMs, timestamp: Date.now() },
-    ],
+    nodeExecutionLog: [{ node: "research", iteration: iter, durationMs: Date.now() - startMs, timestamp: Date.now() }],
   };
 }
 
@@ -131,10 +125,7 @@ async function mockAnalyzerNode(
 
   return {
     analysisResult,
-    nodeExecutionLog: [
-      ...state.nodeExecutionLog,
-      { node: "analyzer", iteration: iter, durationMs: Date.now() - startMs, timestamp: Date.now() },
-    ],
+    nodeExecutionLog: [{ node: "analyzer", iteration: iter, durationMs: Date.now() - startMs, timestamp: Date.now() }],
   };
 }
 
@@ -178,17 +169,14 @@ async function mockCriticNode(
     shouldContinue,
     iterationNumber: shouldContinue ? iter + 1 : iter,
     ...(finalAnswer !== undefined ? { finalAnswer } : {}),
-    nodeExecutionLog: [
-      ...state.nodeExecutionLog,
-      {
+    nodeExecutionLog: [{
         node: "critic",
         iteration: iter,
         durationMs: Date.now() - startMs,
         criticScore: criticResult.overallScore,
         ...(criticResult.exitReason !== undefined ? { exitReason: criticResult.exitReason } : {}),
         timestamp: Date.now(),
-      },
-    ],
+      }],
   };
 }
 

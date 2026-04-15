@@ -14,7 +14,7 @@
  *   BRAVE_SEARCH_API_KEY=...   (falls back to mock results without it)
  */
 
-import { ResearchAgent } from "./agent.js";
+import { ResearchAgent } from "./agent";
 
 async function main() {
   const agent = new ResearchAgent({

@@ -11,11 +11,11 @@
  *   const result = await agent.run("What is quantum computing?");
  */
 
-import { ResearchMemory } from "./memory/ResearchMemory.js";
-import { injectMemory } from "./graph/nodes/researchNode.js";
-import { buildResearchGraph, buildInitialState } from "./graph/stateGraph.js";
-import { logger } from "./observability/logger.js";
-import type { FinalAnswer, NodeExecutionEntry } from "./contracts/index.js";
+import { ResearchMemory } from "./memory/ResearchMemory";
+import { injectMemory } from "./graph/nodes/researchNode";
+import { buildResearchGraph, buildInitialState } from "./graph/stateGraph";
+import { logger } from "./observability/logger";
+import type { FinalAnswer, NodeExecutionEntry } from "./contracts/index";
 
 export interface AgentRunOptions {
   /** Maximum reasoning iterations before degraded exit. Default: 3 */
